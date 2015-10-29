@@ -27,3 +27,11 @@ class Config(object):
     QINIU_SECRET_KEY = "MGrnP5W2_eFjBPdsXoad5le_KXAN7dhEZMKE_B6n"
     QINIU_BUCKET_NAME = "ydhl-360md"
     QINIU_BUCKET_DOMAIN = "http://7xkvl2.com1.z0.glb.clouddn.com"
+
+
+    MAIL_SERVER = 'smtp.exmail.qq.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'wall-e@ihaoyisheng.com'
+    MAIL_PASSWORD = 'ihaoyisheng123'
+    ADMINS = ['server@ihaoyisheng.com']
