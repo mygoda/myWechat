@@ -1,0 +1,7 @@
+# wechat
+flask
+wechat_sdk
+requests
+flask-sqlalchemy>=1.0
+mysql-python>=1.2.5
+redis

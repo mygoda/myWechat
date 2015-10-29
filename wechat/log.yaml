@@ -1,0 +1,58 @@
+version: 1
+formatters:
+  hiformat:
+    format: '[%(levelname)s] {%(pathname)s:%(lineno)d} [%(asctime)s] - %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: hiformat
+    stream: ext://sys.stdout
+  file:
+    class: logging.handlers.TimedRotatingFileHandler
+    level: DEBUG
+    formatter: hiformat
+    filename: /var/log/myWechat/debug.log
+    when: midnight
+    backupCount: 30
+  info_file:
+    class: logging.handlers.TimedRotatingFileHandler
+    level: INFO
+    formatter: hiformat
+    filename: /var/log/myWechat/info.log
+    when: midnight
+    backupCount: 30
+  error_file:
+    class: logging.handlers.TimedRotatingFileHandler
+    level: ERROR
+    formatter: hiformat
+    filename: /var/log/myWechat/error.log
+    when: midnight
+    backupCount: 30
+  method_time_file:
+    class: logging.handlers.TimedRotatingFileHandler
+    level: DEBUG
+    formatter: hiformat
+    filename: /var/log/myWechat/method_time.log
+    when: midnight
+    backupCount: 30
+loggers:
+  console:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+  file:
+    level: DEBUG
+    handlers: [file]
+    propagate: no
+  church:
+    level: DEBUG
+    handlers: [console,file,info_file,error_file]
+    propagate: no
+  method_time:
+    level: DEBUG
+    handlers: [method_time_file, console]
+    propagate: no
+root:
+  level: DEBUG
+  handlers: [console,file,info_file,error_file]
