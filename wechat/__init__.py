@@ -38,3 +38,9 @@ except(Exception,):
     pass
 
 from . import wechat_public
+
+
+class WechatCodeNeedException(Exception):
+    def __init__(self, url, from_number=None):
+        self.url = url
+        self.from_number = from_number
