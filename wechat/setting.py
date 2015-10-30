@@ -4,7 +4,7 @@
 
 class Config(object):
 
-    SECRET_KEY = ''
+    SECRET_KEY = '1234567890123'
 
     WECHAT_APP_TOKEN = u'testtest'
 
