@@ -173,4 +173,4 @@ def _get_openid_and_code(wechat, from_number=None):
 
 def _get_user_info_by_openid(wechat):
     openid = _get_openid_and_code(wechat)
-    return wechat.get_user_info(open_id=openid)
+    return wechat.get_user_info(user_id=openid)
