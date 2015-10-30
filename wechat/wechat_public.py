@@ -135,7 +135,7 @@ def fomat_user(info, message=u'关注信息自动回复'):
 
 
 def welcome_user(wechat, nickname, avatar_url):
-    welcome_title = u'欢迎您:%s' % nickname
+    welcome_title = u'欢迎您-{nickname}'.format(nickname=nickname)
     welcome_title = [
         {
             'title': welcome_title,
