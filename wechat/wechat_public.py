@@ -36,7 +36,7 @@ def call():
                            wechat=current_wechat)
 
 
-def wechat_response(signature, timestamp, nonce, body_text, wechat, official_account):
+def wechat_response(signature, timestamp, nonce, body_text, wechat):
     current_app.logger.debug("start wechat response")
 
     # 对签名进行校验
