@@ -58,14 +58,14 @@ def wechat_response(signature, timestamp, nonce, body_text, wechat):
         elif isinstance(message, EventMessage):  # 事件信息
             wechat_user = wechat.get_user_info(user_id=message.source)
             if message.type == 'subscribe':  # 关注事件(包括普通关注事件和扫描二维码造成的关注事件)
-                pass
-            elif message.type == 'unsubscribe':  # 取关
-                pass
-            elif message.type == 'scan':
                 current_app.logger.debug("start scan")
                 user_info = get_user_info_from_wechat(wechat_user)
                 info = fomat_user(user_info)
                 response = welcome_user(wechat=wechat, nickname=info[1], avatar_url=info[2])
+            elif message.type == 'unsubscribe':  # 取关
+                pass
+            elif message.type == 'scan':
+                pass
             elif message.type == 'location':
                 pass
             elif message.type == 'click':
