@@ -3,14 +3,15 @@
 
 from . import wechat_app
 from . import wechat as my_wechat
-from flask import current_app, request, render_template
+from flask import current_app, request, render_template, session
 
 from wechat_sdk.messages import *
 
 
 @wechat_app.route("/index/", methods=['GET'])
 def index():
-    return render_template("index.html")
+    user_json = _get_user_info_by_openid(wechat=my_wechat)
+    return render_template("index.html", user=user_json)
 
 
 @wechat_app.route("/public", methods=['GET', 'POST'])
@@ -134,15 +135,42 @@ def fomat_user(info, message=u'关注信息自动回复'):
            u"您说了: %s" % (info[0], info[1], info[2], info[3], info[4], info[5], info[6], message)
 
 
-def welcome_user(wechat, nickname, avatar_url):
-    welcome_title = u'欢迎您-{nickname}'.format(nickname=nickname)
+def welcome_user(wechat):
+    """
+        关注返回信息
+    :param wechat:
+    :return:
+    """
     welcome_title = [
         {
-            'title': welcome_title,
-            'picurl': avatar_url,
+            'title': u"欢迎你热烈欢迎",
+            'picurl': "http://data.ihaoyisheng.com/169258_avatar.jpeg",
             'url': u'#',
         }
     ]
     current_app.logger.debug(welcome_title)
     response = wechat.response_news(welcome_title)
     return response
+
+
+def _get_openid_and_code(wechat, from_number=None):
+
+    openid = session.get('openid')
+    if openid:
+        current_app.logger.debug('load openid from session: %s' % openid)
+        return openid
+
+    code = request.args.get('code')
+    current_app.logger.debug('wechat_register code: %s' % code)
+    if not code:
+        from . import WechatCodeNeedException
+        raise WechatCodeNeedException(url=request.url, from_number=from_number)
+
+    openid = wechat.get_openid(code=code)
+    session['openid'] = openid
+    return openid
+
+
+def _get_user_info_by_openid(wechat):
+    openid = _get_openid_and_code(wechat)
+    return wechat.get_user_info(user_id=openid)

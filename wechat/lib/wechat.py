@@ -91,6 +91,15 @@ class CachedWechatBasic(WechatBasic):
         logging.debug('get access_token result: %s' % r.text)
         return r.json().get('openid')
 
+    def get_user_info(self, user_id, lang='zh_CN'):
+        r = requests.get(
+            'https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN' % (
+                self.access_token, self.user_id))
+        logging.debug("get user_info")
+        logging.debug('get access_token result: %s' % r.text)
+        return r.json()
+
+
 
 class MyCachedWechatBasic(CachedWechatBasic):
 
