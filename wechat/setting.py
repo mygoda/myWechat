@@ -27,4 +27,4 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = 'wall-e@ihaoyisheng.com'
     MAIL_PASSWORD = 'ihaoyisheng123'
-    ADMINS = ['server@ihaoyisheng.com']
+    ADMINS = ['18346552658@163.com']
