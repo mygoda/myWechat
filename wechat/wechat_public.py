@@ -62,6 +62,7 @@ def wechat_response(signature, timestamp, nonce, body_text, wechat):
             elif message.type == 'unsubscribe':  # 取关
                 pass
             elif message.type == 'scan':
+                current_app.logger.debug("start scan")
                 user_info = get_user_info_from_wechat(wechat_user)
                 info = fomat_user(user_info)
                 return welcome_user(wechat=wechat, nickname=info[1], avatar_url=info[2])
@@ -134,7 +135,7 @@ def fomat_user(info, message=u'关注信息自动回复'):
 
 
 def welcome_user(wechat, nickname, avatar_url):
-
+    current_app.logger.debug("start welcome")
     welcome_title = [
         {
             'title': u'欢迎您:%s' % nickname,
