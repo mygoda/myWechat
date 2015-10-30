@@ -10,6 +10,7 @@ from wechat_sdk.messages import *
 
 @wechat_app.route("/index/", methods=['GET'])
 def index():
+    current_app.logger.debug(request.url)
     user_json = _get_user_info_by_openid(wechat=my_wechat)
     return render_template("index.html", user=user_json)
 
