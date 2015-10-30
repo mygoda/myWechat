@@ -3,8 +3,8 @@
 import os
 
 import redis
-
-from flask import Flask
+import urllib
+from flask import Flask, current_app, redirect
 
 from wechat.setting import Config
 from wechat.lib.log import configure_log
@@ -44,3 +44,9 @@ class WechatCodeNeedException(Exception):
     def __init__(self, url, from_number=None):
         self.url = url
         self.from_number = from_number
+
+
+@wechat_app.errorhandler(WechatCodeNeedException)
+def wechat_code_need_handler(e):
+    current_app.logger.debug('oauth redirect to: %s, %s' % (e.url, e.from_number))
+    return redirect(wechat.oauth2_url % urllib.quote_plus(e.url))
