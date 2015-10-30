@@ -1,21 +1,34 @@
 # -*- coding: UTF-8 -*-
 # __author__ = xutao
-
-from . import wechat_app
 from . import wechat as my_wechat
-from flask import current_app, request, render_template, session
+import urllib
+from flask import current_app, request, render_template, session, Blueprint, redirect
 
 from wechat_sdk.messages import *
 
+wechat_bp = Blueprint('wechat', __name__)
 
-@wechat_app.route("/index/", methods=['GET'])
+
+class WechatCodeNeedException(Exception):
+    def __init__(self, url, from_number=None):
+        self.url = url
+        self.from_number = from_number
+
+
+@wechat_bp.errorhandler(WechatCodeNeedException)
+def wechat_code_need_handler(e):
+    current_app.logger.debug('oauth redirect to: %s, %s' % (e.url, e.from_number))
+    return redirect(my_wechat.oauth2_url % urllib.quote_plus(e.url))
+
+
+@wechat_bp.route("/index/", methods=['GET'])
 def index():
     current_app.logger.debug(request.url)
     user_json = _get_user_info_by_openid(wechat=my_wechat)
     return render_template("index.html", user=user_json)
 
 
-@wechat_app.route("/public", methods=['GET', 'POST'])
+@wechat_bp.route("/public", methods=['GET', 'POST'])
 def call():
     current_app.logger.debug('Wechat call, request %s' % request)
     signature = request.args.get('signature')
@@ -164,7 +177,6 @@ def _get_openid_and_code(wechat, from_number=None):
     code = request.args.get('code')
     current_app.logger.debug('wechat_register code: %s' % code)
     if not code:
-        from . import WechatCodeNeedException
         raise WechatCodeNeedException(url=request.url, from_number=from_number)
 
     openid = wechat.get_openid(code=code)
