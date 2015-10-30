@@ -50,7 +50,7 @@ def wechat_response(signature, timestamp, nonce, body_text, wechat):
 
         if isinstance(message, TextMessage):
             wechat_user = wechat.get_user_info(user_id=message.source)
-            content = _text_message(message=message, wechat_user=wechat_user)
+            content = _text_message(message=message.content, wechat_user=wechat_user)
             if not content:
                 return ""
             response = wechat.response_text(content=content)
@@ -64,7 +64,7 @@ def wechat_response(signature, timestamp, nonce, body_text, wechat):
             elif message.type == 'scan':
                 user_info = get_user_info_from_wechat(wechat_user)
                 info = fomat_user(user_info)
-                wechat.response_text(content=info)
+                return welcome_user(wechat=wechat, nickname=info[1], avatar_url=info[2])
             elif message.type == 'location':
                 pass
             elif message.type == 'click':
@@ -105,10 +105,9 @@ def get_user_info_from_wechat(wechat_user):
     nickname = wechat_user.get('nickname').strip()  # 格式化下
     url = wechat_user.get('headimgurl')
     if url:
-        # 上传到七牛云上， 持久化
         avatar_url = url
     else:
-        avatar_url = "no head image"
+        avatar_url = "http://data.ihaoyisheng.com/169258_avatar.jpeg"   # 默认给张图片
 
     sex_code = wechat_user.get("sex")
     if sex_code == 1:
@@ -132,3 +131,16 @@ def fomat_user(info, message=u'关注信息自动回复'):
     """
     return u"openid:%s; 微信名:%s; 头像:%s; 性别:%s; 省份:%s; 城市:%s; 国家:%s\n" \
            u"来自于 %s" % (info[0], info[1], info[2], info[3], info[4], info[5], info[6], message)
+
+
+def welcome_user(wechat, nickname, avatar_url):
+
+    welcome_title = [
+        {
+            'title': u'欢迎您:%s' % nickname,
+            'picurl': u'%s' % avatar_url,
+            'url': u'#',
+        }
+    ]
+
+    return wechat.response_news(welcome_title)
