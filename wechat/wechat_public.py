@@ -65,7 +65,7 @@ def wechat_response(signature, timestamp, nonce, body_text, wechat):
                 current_app.logger.debug("start scan")
                 user_info = get_user_info_from_wechat(wechat_user)
                 info = fomat_user(user_info)
-                return welcome_user(wechat=wechat, nickname=info[1], avatar_url=info[2])
+                response = welcome_user(wechat=wechat, nickname=info[1], avatar_url=info[2])
             elif message.type == 'location':
                 pass
             elif message.type == 'click':
@@ -144,4 +144,5 @@ def welcome_user(wechat, nickname, avatar_url):
         }
     ]
 
-    return wechat.response_news(welcome_title)
+    response = wechat.response_news(welcome_title)
+    return response
