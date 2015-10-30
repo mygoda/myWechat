@@ -1,13 +1,17 @@
 # -*- coding: UTF-8 -*-
 # __author__ = xutao
 import os
+
 import redis
+
 from flask import Flask
-from setting.setting import Config
-from lib.log import configure_log
+
+from wechat.setting import Config
+from wechat.lib.log import configure_log
+
 
 # 实例化 wechat app
-from lib.wechat import MyCachedWechatBasic
+from wechat.lib.wechat import MyCachedWechatBasic
 
 wechat_app = Flask(__name__)
 
@@ -33,11 +37,4 @@ try:
 except(Exception,):
     pass
 
-
-# qiniu
-
-from qiniu import Auth, BucketManager
-
-q = Auth(config.get('QINIU_ACCESS_KEY'), config.get('QINIU_SECRET_KEY'))
-q_token = q.upload_token(bucket='ih-data', expires=31536000)  # 一年过期
-bucket = BucketManager(q)
+from . import wechat_public

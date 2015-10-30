@@ -3,10 +3,14 @@
 
 from . import wechat_app
 from . import wechat as my_wechat
-from flask import current_app, request
+from flask import current_app, request, render_template
 
 from wechat_sdk.messages import *
-from lib.qiniu import upload_img_by_url
+
+
+@wechat_app.route("/index/", methods=['GET'])
+def index():
+    return render_template("index.html")
 
 
 @wechat_app.route("/public", methods=['GET', 'POST'])
@@ -102,7 +106,7 @@ def get_user_info_from_wechat(wechat_user):
     url = wechat_user.get('headimgurl')
     if url:
         # 上传到七牛云上， 持久化
-        avatar_url = upload_img_by_url(url=wechat_user.get('headimgurl'), filename='%s_avatar.jpeg' % openid)
+        avatar_url = url
     else:
         avatar_url = "no head image"
 
