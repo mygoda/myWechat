@@ -131,11 +131,11 @@ def fomat_user(info, message=u'关注信息自动回复'):
     :return:
     """
     return u"openid:%s; 微信名:%s; 头像:%s; 性别:%s; 省份:%s; 城市:%s; 国家:%s\n" \
-           u"来自于 %s" % (info[0], info[1], info[2], info[3], info[4], info[5], info[6], message)
+           u"您说了: %s" % (info[0], info[1], info[2], info[3], info[4], info[5], info[6], message)
 
 
 def welcome_user(wechat, nickname, avatar_url):
-    current_app.logger.debug("start welcome")
+
     welcome_title = [
         {
             'title': u'欢迎您:%s' % nickname,
@@ -143,6 +143,6 @@ def welcome_user(wechat, nickname, avatar_url):
             'url': u'#',
         }
     ]
-
+    current_app.logger.debug(welcome_title)
     response = wechat.response_news(welcome_title)
     return response
