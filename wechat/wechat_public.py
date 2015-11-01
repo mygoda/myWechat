@@ -12,6 +12,7 @@ wechat_bp = Blueprint('wechat', __name__)
 """
     通过捕获异常，来重定向到自己的网页
 """
+
 class WechatCodeNeedException(Exception):
     def __init__(self, url, from_number=None):
         self.url = url
@@ -90,9 +91,7 @@ def wechat_response(signature, timestamp, nonce, body_text, wechat):
             wechat_user = wechat.get_user_info(user_id=message.source)
             if message.type == 'subscribe':  # 关注事件(包括普通关注事件和扫描二维码造成的关注事件)
                 current_app.logger.debug("start scan")
-                user_info = get_user_info_from_wechat(wechat_user)
-                info = fomat_user(user_info)
-                response = welcome_user(wechat=wechat, nickname=info[1], avatar_url=info[2])
+                response = welcome_user(wechat=wechat)
             elif message.type == 'unsubscribe':  # 取关
                 pass
             elif message.type == 'scan':
