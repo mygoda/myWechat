@@ -31,6 +31,8 @@ r = redis.StrictRedis(host=config.get('REDIS_HOST'), port=config.get('REDIS_PORT
                       password=config.get('REDIS_PASSWORD'))
 
 
+# 实例化微信处理类
+
 wechat = None
 try:
     wechat = MyCachedWechatBasic(app=wechat_app, r=r)

@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 # __author__ = xutao
+
 from . import wechat as my_wechat
 import urllib
 from flask import current_app, request, render_template, session, Blueprint, redirect
@@ -8,7 +9,9 @@ from wechat_sdk.messages import *
 
 wechat_bp = Blueprint('wechat', __name__)
 
-
+"""
+    通过捕获异常，来重定向到自己的网页
+"""
 class WechatCodeNeedException(Exception):
     def __init__(self, url, from_number=None):
         self.url = url
@@ -23,6 +26,10 @@ def wechat_code_need_handler(e):
 
 @wechat_bp.route("/index/", methods=['GET'])
 def index():
+    """
+        其实就是测试使用的
+    :return:
+    """
     current_app.logger.debug(request.url)
     user_json = _get_user_info_by_openid(wechat=my_wechat)
     return render_template("index.html", user=user_json)
@@ -52,6 +59,15 @@ def call():
 
 
 def wechat_response(signature, timestamp, nonce, body_text, wechat):
+    """
+        微信主要的处理函数
+    :param signature:
+    :param timestamp:
+    :param nonce:
+    :param body_text:
+    :param wechat:
+    :return:
+    """
     current_app.logger.debug("start wechat response")
 
     # 对签名进行校验
@@ -185,5 +201,10 @@ def _get_openid_and_code(wechat, from_number=None):
 
 
 def _get_user_info_by_openid(wechat):
+    """
+        通过aopenid 获取用户信息
+    :param wechat:
+    :return:
+    """
     openid = _get_openid_and_code(wechat)
     return wechat.get_user_info(user_id=openid)
